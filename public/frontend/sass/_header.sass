@@ -1,0 +1,126 @@
+.header 
+	position: absolute
+	z-index: 99
+	top: 0
+	left: 0
+	width: 100%
+	// background: rgba(0,0,0,.5)
+
+	&_inner 
+		border-bottom: 1px solid rgba(255,255,255,.2)
+		padding: 15px 0 30px
+
+	&_right 
+		text-align: right
+
+.logo 
+	max-width: 230px
+	margin-top: 15px
+
+.nav_utility 
+	margin-bottom: 30px
+
+.lang 
+	display: inline-block
+	ul 
+		list-style: none
+		padding: 0
+		margin: 0
+
+		li 
+			display: inline-block
+			margin: 0 5px
+
+			a 
+				color: rgba(255,255,255,.8)
+				font-size: 12px
+
+				&:hover 
+					color:  rgba(255,255,255, 1)
+
+.search_btn 
+	display: inline-block
+	margin-left: 15px
+	color: rgba(255,255,255,.8)
+	&:hover 
+		color:  rgba(255,255,255, 1)
+
+.nav_global
+	margin-top: 20px
+	ul 
+		list-style: none
+		padding: 0
+		margin: 0
+
+		li 
+			display: inline-block
+			margin-left: 40px
+			a 
+				color: #fff
+				font-weight: 600
+				// font-size: 18px
+				text-decoration: none
+				position: relative
+
+				&:after
+					content: ""
+					display: block
+					opacity: 0
+					visibility: hidden
+					width: 0
+					height: 2px
+					background: #fff
+					transition: all .3s ease-in-out
+					margin: auto
+					margin-top: 5px
+
+				&:hover
+					&:after
+						opacity: 1
+						visibility: visible
+						width: 100%
+	
+			&.active 
+				a 
+					&:after
+						opacity: 1
+						visibility: visible
+						width: 100%
+					
+
+.search_popup
+	background: rgba(0,0,0,.7)
+	.close 
+		text-shadow: none
+		color: #fff
+		opacity: 1
+		font-size: 30px
+		font-weight: 400
+		display: inline-block
+		height: 50px
+		width: 50px
+
+
+.search_form
+	border-bottom: 1px solid #fff
+	margin-top: 150px
+
+	input, button
+		background: transparent !important
+		border: none
+		height: 100px
+
+		&:focus
+			outline: none
+			box-shadow: none
+	
+	input 	
+		font-size: 30px
+		padding-left: 0
+		color: #fff
+	
+	button
+		font-size: 30px
+		color: #fff !important
+
+	

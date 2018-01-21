@@ -1,0 +1,189 @@
+main.main 
+	clear: both
+
+.section 
+	padding: 100px 0
+	&:before, &:after 
+		content: ""
+		display: table
+		clear: both
+
+	
+	&_title 
+		text-align: center
+		margin-bottom: 50px
+
+		h3
+			font-weight: 700
+			text-transform: uppercase
+			font-size: 40px
+			display: inline-block
+			color: #000
+			padding: 7px 15px
+			margin: 0 0 20px
+			
+
+		p 
+			font-size: 16px
+
+
+
+// floor
+.floor 
+	background: #eee
+
+	&_item 
+		// padding: 30px
+		box-shadow: rgba(0,0,0,.1) 0 3px 4px;
+		background: #fff
+		transition: all .2s ease-in-out
+		overflow: hidden
+
+		&:hover 
+			box-shadow: rgba(0,0,0,.1) 0 10px 30px;
+			transform: translateY(-10px)
+
+		.img
+			min-height: 200px
+			background: #ddd
+
+			img 
+				display: block
+				max-width: 100%
+
+		&-content
+			padding: 30px 50px
+			text-align: left
+			
+			h2
+				font-size: 20px
+				text-transform: uppercase
+				font-weight: 700
+				margin-bottom: 30px
+				text-align: center
+
+			p 
+				line-height: 30px
+				
+
+			a 
+				color: #2aa9e0
+				font-weight: 700
+				font-size: 12px
+				border-bottom: 2px solid #2aa9e0
+				padding-bottom: 5px
+				text-decoration: none
+
+
+
+// gallery
+.gallery 
+	.list_img
+		ul
+			list-style: none
+			padding: 0
+			margin: 0 -10px
+			
+			li 
+				float: left
+				width: 25%
+				position: relative
+				padding: 10px
+
+				.img 
+					// min-height: 200px
+					background: red
+						
+					img 
+						display: block
+						max-width: 100%
+
+				.content
+					position: absolute
+					top: 0
+					left: 0
+					bottom: 0
+					right: 0
+					padding: 30px
+					
+					display: flex
+					flex-direction: column
+					justify-content: center
+					background: rgba(0,0,0,.7)
+					color: #fff
+					transition: all .3s ease-in-out
+					opacity: 0
+					visibility: hidden
+					transform: scale(.5)
+
+
+					h3 
+						font-size: 14px
+						font-weight: 700
+						// text-transform: uppercase
+						line-height: 25px
+						margin: 0 0 20px
+
+					p 
+						margin: 0
+						font-size: 12px
+
+				&:hover 
+					.content
+						opacity: 1
+						visibility: visible
+						transform: scale(1)
+
+
+	
+// contact
+.contact 
+	background: #eee
+	position: relative
+
+	&_wrap
+		position: relative
+		z-index: 9999
+		background: #fff
+		padding: 30px
+	
+
+		.section_title
+			margin-bottom: 15px
+
+
+	&_info 
+		margin: 0 0 30px
+		
+
+		&-left 
+			float: left
+			font-size: 25px
+			margin-top: -7px
+
+		&-right 
+			padding-left: 50px
+
+			h5 
+				color: #000000
+				font-size: 17px
+				margin: 0 0 15px 0
+				font-weight: 600
+
+			p 
+				color: #999999
+				line-height: 2
+
+	&_map 
+		background: #fff
+		// margin-top: 30px
+		position: absolute
+		top: 0
+		left: 0
+		width: 100%
+		height: 710px
+
+		.map
+		    width: 100%
+		    height: 710px
+		    position: 
