@@ -8,6 +8,7 @@ use App\Repositories\CategoryRepository;
 use App\Repositories\ItemStoryRepository;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\ItemTranslateRepository;
+use App\Models\MCategory;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 
@@ -43,15 +44,17 @@ class ItemStoryController extends Controller
     /*Trả về view tạo mới một item với danh sách parent_id */
     public function create(CategoryRepository $categoryRepository)
     {
-        $category_list = $categoryRepository->getListCategoryWithLangParentID('en', 0);
+        /*$category_list = $categoryRepository->getListCategoryWithLangParentID('en', 0);
         foreach ($category_list as &$row) {
             $sub = $categoryRepository->getListCategoryWithLangParentID('en', $row['category_id']);
             $row['sub'] = $sub;
             /*foreach ($row['sub'] as &$sub) {
                 $sub_con = $categoryRepository->getListCategoryWithLangParentID('en', $sub['category_id']);
                 $sub['sub_con'] = $sub_con;
-            }*/
-        }
+            }
+        }*/
+        $category_list = MCategory::where('parent_id', 0)->get();
+
         return view('Backend.items.create',['category_list' => $category_list]);
     }
 
@@ -217,11 +220,7 @@ class ItemStoryController extends Controller
         }
         else
         {
-            $category_list = $categoryRepository->getListCategoryWithLangParentID('en', 0);
-            foreach ($category_list as &$row) {
-                $sub = $categoryRepository->getListCategoryWithLangParentID('en', $row['category_id']);
-                $row['sub'] = $sub;
-            }
+            $category_list = MCategory::where('parent_id', 0)->get();
             $item_story = $itemStoryRepository->find((int)$id);
             return view('Backend.items.update', ['item_story' => $item_story,'category_list' => $category_list]);
         }
@@ -247,6 +246,7 @@ class ItemStoryController extends Controller
                 'description_vn'    =>  'required',
                 'description_en'    =>  'required',
                 'description_jp'    =>  'required',
+                'image'             => 'sometimes|image',
                 
             ],
             [
@@ -270,22 +270,26 @@ class ItemStoryController extends Controller
         else
         {
             
-            $code = $request->get('code');
-            $parent_id = $request->get('parent_id');
-            $status = $request->get('status');
-            $name_vn = $request->get('name_vn');
-            $name_en = $request->get('name_en');
-            $name_jp = $request->get('name_jp');
-            $description_vn = $request->get('description_vn');
-            $description_en = $request->get('description_en');
-            $description_jp = $request->get('description_jp');
+            $code = $request->code;
+            $parent_id = $request->parent_id;
+            $status = $request->status;
+            $name_vn = $request->name_vn;
+            $name_en = $request->name_en;
+            $name_jp = $request->name_jp;
+            $description_vn = $request->description_vn;
+            $description_en = $request->description_en;
+            $description_jp = $request->description_jp;
+            
             //upload file
             if (Input::hasfile('image'))
             {
-                $nameImage = Input::file('image')->getClientOriginalExtension();
-                return $nameImage;
-                $imageURL = $id . "." . date("H_i_s",time()). ".". $nameImage;
+                $nameImage = $request->file('image');
+                $extension = $nameImage->getClientOriginalExtension();
+
+               // return $nameImage;
+                $imageURL = $id . "." . date("H_i_s"). ".". $extension;
                 $oldImage = $item->url_image;
+
                 if($oldImage != '')
                 {
                     if(File::exists(public_path('upload/image/item_Story/') . $oldImage))
@@ -293,7 +297,8 @@ class ItemStoryController extends Controller
                         unlink(public_path('upload/image/item_Story/') . $oldImage);   
                     } 
                 }
-                Input::file('image')->move(public_path('upload/image/item_Story/'), $imageURL);
+
+                $nameImage->move(public_path('upload/image/item_Story/'), $imageURL);
                 
                 $itemStoryRepository->update(
                     [

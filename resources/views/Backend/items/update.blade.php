@@ -33,7 +33,7 @@ $status = MSetting::where('s_key','STATUS')->get();
                                     {{ session('notify') }}
                                 </div>
                             @endif
-                            <form class="form-horizontal form-label-left" method="post">
+                            <form class="form-horizontal form-label-left" method="post" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <div class="" role="tabpanel" data-example-id="togglable-tabs">
                                     <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -63,12 +63,14 @@ $status = MSetting::where('s_key','STATUS')->get();
                                                 <div class="col-md-9 col-sm-9 col-xs-12">
                                                     <select class="select2_group form-control" name="parent_id">
                                                        @foreach($category_list as $row)
-                                                            <option value="{{$row['category_id']}}">{{$row['name']}}</option>
-                                                            @foreach($row['sub'] as $sub)
-                                                                <option value="{{$sub['category_id']}}">&nbsp;&nbsp;---{{$sub['name']}}</option>
+                                                            <option value="{{$row->category_id}}" @if (old('parent_id',$item_story->category_id) == $row->category_id) selected @endif>{{$row->name}}</option>
+                                                            @foreach($row->children as $sub)
+                                                                <option value="{{$sub->category_id}}" @if (old('parent_id',$item_story->category_id) == $sub->category_id) selected @endif>&nbsp;&nbsp;---{{$sub->name}}</option>
+                                                                @foreach($sub->children as $subchild)
+                                                                    <option value="{{$subchild->category_id}}" @if (old('parent_id',$item_story->category_id) == $subchild->category_id) selected @endif>&nbsp;&nbsp;------{{$subchild->name}}</option>
+                                                                @endforeach
                                                             @endforeach
                                                         @endforeach
-                                                        
                                                     </select>
                                                 </div>
                                             </div>

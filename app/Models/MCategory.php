@@ -17,7 +17,7 @@ class MCategory extends BaseModel
 
     protected $fillable = [
         'sort_order',
-        'slug',
+
         'id_item_story',
         'image',
         'image_description',
@@ -34,4 +34,13 @@ class MCategory extends BaseModel
 
     public $translatedAttributes = ['name', 'description'];
 
+    public function children()
+    {
+        return $this->hasMany('App\Models\MCategory', 'parent_id', 'category_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('App\Models\MCategory', 'parent_id');
+    }
 }

@@ -59,9 +59,12 @@ $status = MSetting::where('s_key','STATUS')->get();
                                                 <div class="col-md-9 col-sm-9 col-xs-12">
                                                     <select class="select2_group form-control" name="parent_id">
                                                        @foreach($category_list as $row)
-                                                            <option value="{{$row['category_id']}}">{{$row['name']}}</option>
-                                                            @foreach($row['sub'] as $sub)
-                                                                <option value="{{$sub['category_id']}}">&nbsp;&nbsp;---{{$sub['name']}}</option>
+                                                            <option value="{{$row->category_id}}">{{$row->name}}</option>
+                                                            @foreach($row->children as $sub)
+                                                                <option value="{{$sub->category_id}}">&nbsp;&nbsp;---{{$sub->name}}</option>
+                                                                @foreach($sub->children as $subchild)
+                                                                    <option value="{{$subchild->category_id}}">&nbsp;&nbsp;------{{$subchild->name}}</option>
+                                                                @endforeach
                                                             @endforeach
                                                         @endforeach
                                                         
