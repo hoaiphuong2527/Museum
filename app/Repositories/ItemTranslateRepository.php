@@ -11,4 +11,12 @@ class ItemTranslateRepository extends BaseRepository
     {
         $this->model = $item;
     }
+
+    public function getDataItem($lang)
+    {
+        app()->setLocale($lang);
+        return $this->model->where('locale',$lang)->first();
+    }
+
+    
 }

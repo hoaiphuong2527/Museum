@@ -64,7 +64,7 @@ $(document).ready(function () {
             columnClass: 'small',
             buttons: {
                 Xóa: function () {
-                    $.post("/admin/deleteall/", {'list_id': list_id, '_token': token}, function(id) {
+                    $.post("/admin/code/deleteall/", {'list_id': list_id, '_token': token}, function(id) {
                         for (var i = 0; i < list_id.length; i++) {
                             $("#code_" + list_id[i]).remove();               
                         }

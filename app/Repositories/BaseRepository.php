@@ -45,6 +45,10 @@ abstract class BaseRepository
     public function update(array $data, $id, $attribute="id") {
         return $this->model->where($attribute, '=', $id)->update($data);
     }
+
+    public function updateItemTranslate(array $data, $id, $attribute,$lang ,$locale) {
+        return $this->model->where([[$attribute, '=', $id],[$locale,'=',$lang]])->update($data);
+    }
  
     /**
      * @param $id

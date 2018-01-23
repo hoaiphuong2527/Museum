@@ -16,8 +16,10 @@
             </button>
             @if($view == 'users')
                 <a class="navbar-brand" href="#">Quản trị viên</a>
-            @elseif($view == 'stories')
-                <a class="navbar-brand" href="#">Câu chuyện</a>
+            @elseif($view == 'story_item')
+                <a class="navbar-brand" href="#">Bối cảnh</a>
+                @elseif($view == 'code')
+                <a class="navbar-brand" href="#">Mã đăng nhập</a>
             @else
                 <a class="navbar-brand" href="#">Trang chủ</a>
             @endif

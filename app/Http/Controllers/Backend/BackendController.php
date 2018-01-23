@@ -107,12 +107,7 @@ class BackendController extends Controller
     /*function trả về view index của backend*/
     public function index(Request $request,CodeRepository $codeRepository )
     {
-        $string = str_random(6);
-        $codes = $codeRepository->getAllCode();
-        return view('Backend.index',[
-            'codes' => $codes,
-            'string' => $string
-            ]); 
+        return view('Backend.index'); 
         
     }
 

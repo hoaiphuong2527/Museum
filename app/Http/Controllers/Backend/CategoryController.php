@@ -58,21 +58,19 @@ class CategoryController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'slug' => 'required',
+                
                 'sort_order' => 'required',
                 'parent_id' => 'required',
                 'name_vn' => 'required',
                 'name_en' => 'required',
                 'name_jp' => 'required',
-//                'image' => 'sometimes|image|max:4096',
-//                'sound' => 'sometimes|max:4096',
                 'description_vn' => 'required',
                 'description_en' => 'required',
                 'description_jp' => 'required',
             ]
             ,
             [
-                'slug.required' => 'Vui lòng chọn slug',
+                
                 'sort_order.required' => 'Vui lòng chọn sort_order',
                 'parent_id.required' => 'Vui lòng chọn parent_id',
                 'name_vn.required' => 'Vui lòng chọn name_vn',
@@ -103,7 +101,7 @@ class CategoryController extends Controller
             /* Thêm danh mục cho table m_category */
             $item_category = $categoryRepository->create(
                 [
-                    "slug" => $slug,
+                    
                     "sort_order" => $sort_order,
                     "parent_id" => $parent_id,
                     "image" => 'demo',
@@ -174,12 +172,12 @@ class CategoryController extends Controller
 
 
     //view update a quiz
-    public function editQuizForm($id, CategoryRepository $categoryRepository)
+    public function editCategoryForm($id, CategoryRepository $categoryRepository)
     {
-        $validator = Validator::make(['quiz_id' => $id], [
-            'quiz_id'   => 'exists:m_quiz,quiz_id'
+        $validator = Validator::make(['category_id' => $id], [
+            'category_id'   => 'exists:m_category,category_id'
         ], [
-            'quiz_id.required'      => 'Không tồn tại câu hỏi',
+            'category_id.required'      => 'Không tồn tại',
         ]);
 
         if ($validator->fails())
@@ -188,52 +186,42 @@ class CategoryController extends Controller
         }
         else
         {
-            $user = $userRepository->find((int)$id);
-            return view('Backend.quizs.edit_quiz', ['quiz' => $quiz]);
+            $cate = $categoryRepository->find((int)$id);
+            return view('Backend.category.create', ['category' => $cate]);
         }
     }
 
     //update a quiz
-    public function updateQuiz(Request $request, $id, CategoryRepository $categoryRepository)
+    public function updateCategory(Request $request, $id, CategoryRepository $categoryRepository,CategoryTranslationRepository $categoryTranslationRepository )
     {
-        $quiz = $quizRepository->find((int)$id);
-        $validator = Validator::make($request->all(), [
-            'levels'    =>'required',
-            'types'     =>'required',
-            'group'     =>'required',
-            'question'  =>'required|max:1000',
-            'ansA'      =>'required|max:255',
-            'ansB'      =>'required|max:255',
-            'ansC'      =>'sometimes|max:255',
-            'ansD'      =>'sometimes|max:255',
-            'rightAns'  =>'required',
-            'content'   =>'sometimes|max:1000',
-            'image'     =>'sometimes|image|max:4096',
-            'sound'     =>'sometimes|max:4096',
-        ],
+        $cate = $categoryRepository->find((int)$id);
+        $validator = Validator::make(
+            $request->all(),
             [
-                'levels.required'   => 'Vui lòng chọn trình độ cho câu hỏi.',
-                'types.required'    => 'Vui lòng chọn loại cho câu hỏi.',
-                'group.required'    => 'Vui lòng chọn nhóm cho câu hỏi.',
-                'question.required' => 'Vui lòng nhập nội dung câu hỏi.',
-                'question.max'      => 'Câu hỏi tối đa có 1000 ký tự.',
-                'ansA.required'     => 'Vui lòng nhập nội dung câu trả lời.',
-                'ansA.max'          => 'Câu hỏi tối đa có 255 ký tự.',
-                'ansB.required'     => 'Vui lòng nhập nội dung câu trả lời.',
-                'ansB.max'          => 'Câu hỏi tối đa có 255 ký tự.',
-                'ansC.max'          => 'Câu hỏi tối đa có 255 ký tự.',
-                'ansD.max'          => 'Câu hỏi tối đa có 255 ký tự.',
-                'rightAns.required' => 'Vui lòng chọn câu trả lời đúng.',
-                'content.max'       => 'Lời giải thích câu trả lời đúng tối đa có 1000 ký tự.',
-                'image.max'         => 'Hình ảnh chọn phải nhỏ hơn 4MB.',
-                'image.image'       => 'Vui lòng chọn hình ảnh cho câu hỏi',
-                'image.uploaded'    => 'Vui lòng chọn đúng kiểu hình ảnh.',
-                'sound.uploaded'    => 'Vui lòng chọn đúng kiểu âm thanh.',
-                'sound.max'         => 'Âm thanh chọn phải nhỏ hơn 4MB',
-                'sound.mimes'       => 'Vui lòng chọn đúng kiểu âm thanh.',
+                
+                'sort_order' => 'required',
+                'parent_id' => 'required',
+                'name_vn' => 'required',
+                'name_en' => 'required',
+                'name_jp' => 'required',
+                'description_vn' => 'required',
+                'description_en' => 'required',
+                'description_jp' => 'required',
+            ]
+            ,
+            [
+                
+                'sort_order.required' => 'Vui lòng chọn sort_order',
+                'parent_id.required' => 'Vui lòng chọn parent_id',
+                'name_vn.required' => 'Vui lòng chọn name_vn',
+                'name_en.required' => 'Vui lòng chọn name_en',
+                'name_jp.required' => 'Vui lòng chọn name_jp',
+                'description_vn.required' => 'Vui lòng chọn description_vn',
+                'parent_id.description_en' => 'Vui lòng chọn description_en',
+                'description_jp.required' => 'Vui lòng chọn description_jp',
 
-
-            ]);
+            ]
+        );
 
         if ($validator->fails())
         {
@@ -241,45 +229,7 @@ class CategoryController extends Controller
         }
         else
         {
-            //if check delete image
-            if($request->input('delete_image'))
-            {
-                // find quiz by id
-                $imageURL = $quiz->image;
-                //unlink image in folder image
-                if(File::exists(public_path('upload/image/quiz/') . $imageURL))
-                {
-                    unlink(public_path('upload/image/quiz/') . $imageURL);
-                }
-                // update url of image in database
-                $quizRepository->update(
-                    [
-                        "image"          => "",
-                    ],
-                    $id,
-                    "quiz_id"
-                );
-            }
-
-            // if check detele sound
-            if($request->input('delete_sound'))
-            {
-                //find quiz by id
-                $soundURL = $quiz->sound;
-                //unlink sound in folder auido
-                if(File::exists(public_path('upload/audio/quiz/') . $soundURL))
-                {
-                    unlink(public_path('upload/audio/quiz/').$soundURL);
-                }
-                //update usl of sound in db
-                $quizRepository->update(
-                    [
-                        "sound"          => "",
-                    ],
-                    $id,
-                    "quiz_id"
-                );
-            }
+        
             //if choose new image for quiz
             if (Input::hasfile('image'))
             {
@@ -334,14 +284,19 @@ class CategoryController extends Controller
 
 
             }
-            //
-            if(($request->get('ansC') == '' && $request->get('rightAns') == 3) || ($request->get('ansD')== '' && $request->get('rightAns') == 4))
-            {
-                return redirect()->back()->withErrors(['quiz' => "Vui lòng chọn đúng đáp án cho câu hỏi."])->withInput();
-            }
-            //
+
+            $code = $request->get('code');
+            $parent_id = $request->get('parent_id');
+            $status = $request->get('status');
+            $name_vn = $request->get('name_vn');
+            $name_en = $request->get('name_en');
+            $name_jp = $request->get('name_jp');
+            $description_vn = $request->get('description_vn');
+            $description_en = $request->get('description_en');
+            $description_jp = $request->get('description_jp');
+
             //update quiz
-            $quizRepository->update(
+            $item_category = $categoryRepository->update(
                 [
                     "level_id"          =>$request->get('levels'),
                     "quiz_type"         =>$request->get('types'),
@@ -355,9 +310,68 @@ class CategoryController extends Controller
                     "right_ans_exp"     =>$request->get('content')
                 ],
                 $id,
-                "quiz_id"
+                "category_id"
             );
-            return redirect('quizs');
+           /* $item_category = $categoryRepository->update(
+                [
+                    
+                    "sort_order" => $sort_order,
+                    "parent_id" => $parent_id,
+                    "image" => 'demo',
+                    "image_description" => 'demo',
+                    "video" => 'demo',
+                    "deleted_flag" => 0,
+                    "created_user" => 1,
+                    "created_time" => date("Y-m-d H:i:s"),
+                    "updated_user" => 1,
+                    "updated_time" => date("Y-m-d H:i:s"),
+                ],
+                $id,
+                "category_id"
+            );*/
+
+            /* Thêm danh mục (vn) cho table m_category_translation */
+            $item_category_translation_vn = $categoryTranslationRepository->updateItemTranslate(
+                [
+                    "name"          => $name_vn,
+                    "description"   => $description_vn,
+                    "locale"        => 'vi',
+                ],$cate->category_id,
+                "category_id", 
+                'vi',
+                "locale"
+            );
+
+            /* Thêm danh mục (jp) cho table m_category_translation */
+            $item_category_translation_en = $categoryTranslationRepository->updateItemTranslate(
+                [
+                    "name"         => $name_en,
+                    "description"   => $description_en,
+                    "locale"        => 'vi',
+                ],$cate->category_id,
+                "category_id", 
+                'vi',
+                "locale"
+            );
+
+            /* Thêm danh mục (jp) cho table m_category_translation */
+            $item_category_translation_jp = $categoryTranslationRepository->updateItemTranslate(
+                [
+                    "name"         => $name_jp,
+                    "description"   => $description_jp,
+                    "locale"        => 'vi',
+                ],$cate->category_id,
+                "category_id", 
+                'vi',
+                "locale"
+            );
+
+            /* Kiểm tra trạng thái và redirect về trang danh sách danh mục*/
+            if($item_category!=null && $item_category_translation_vn!=null && $item_category_translation_en!=null && $item_category_translation_jp!=null) {
+                return redirect('/admin/category')->with('notify-success', 'Thêm danh mục thành công');
+            } else {
+                return redirect('/admin/category')->with('notify-error', 'Thêm danh mục thất bại');
+            } 
         }
 
     }

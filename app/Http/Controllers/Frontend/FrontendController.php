@@ -14,7 +14,6 @@ class FrontendController extends Controller
 {
     public function login()
     {
-        
         return view('Frontend.login');
     }
 
@@ -34,12 +33,20 @@ class FrontendController extends Controller
         else
         {
             $code = $request->input('code');
-            $item = $codeRepository->findCode($code);        
+            $item = $codeRepository->findCode($code);       
             if ($item != null)
             {
+                SessionManager::setLoginInFontend($item);
                 if (SessionManager::isLogined())
                 { 
-                    SessionManager::setLoginInFontend($item);
+                    
+                    $codeRepository->update(
+                        [
+                            "activated"             =>date('Y-m-d h:i:s'),
+                            "expried"               =>date('Y-m-d h:i:s', strtotime("+1 day")), 
+                            "deleted_flag"          => 1,
+        
+                        ],$item->code_id,"code_id");
                     return redirect('/homepage');  
                 } else return redirect()->back()->withErrors(['loginFrontend' => "The code doesn't match, this code is used or time is out."])->withInput();
                 

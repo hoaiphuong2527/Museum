@@ -11,7 +11,11 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="header">
+                        @if($user->user_id == $currentLogin->user_id)
                         <h4 class="title">Thông tin của bạn</h4>
+                        @else
+                        <h4 class="title">Thông tin của {{$user->name}}</h4>
+                        @endif
                     </div>
                     <div class="content">
                         <form method="post" enctype="multipart/form-data">
@@ -134,7 +138,7 @@
                             </a>
                         </div>
                         <p class="description text-center"> 
-                            @if($currentLogin->user_role == 0 )
+                            @if($user->user_role == 0 )
                             <p class="description text-center"> Super admin</p>
                             @else
                             <p class="description text-center"> Admin </p>

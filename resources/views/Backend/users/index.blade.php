@@ -19,7 +19,7 @@
                         <h4 class="title">Thông tin quản trị</h4>
                     </div>
                     <div class="content">
-                        <form method="post" enctype="multipart/form-data">
+                        <form method="post">
                             {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-6">
@@ -103,7 +103,7 @@
                                                 <span class="pe-7s-pen" style="font-size: 20px;font-weight: bold;"></span>
                                             </button>
                                             {{--Nút Xóa--}}
-                                            <div class="btn-delete-user pe-7s-delete-user" style="font-size: 20px;color: red;font-weight: bold;"></div
+                                            <div class="btn-delete-user pe-7s-trash" style="font-size: 20px;color: red;font-weight: bold;"></div
                                         </td>
                                     </tr>
                                 @endforeach

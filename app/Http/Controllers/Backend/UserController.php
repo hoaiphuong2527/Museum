@@ -141,7 +141,6 @@ class UserController extends Controller
         }
 
     }
-    
 
     //detail a quiz
     public function editForm($id, UserRepository $userRepository)
@@ -170,7 +169,6 @@ class UserController extends Controller
             } 
         }
     }
-
     //destroy user
     public function destroyUser($id, UserRepository $userRepository)
     {

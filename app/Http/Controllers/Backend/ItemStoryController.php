@@ -16,8 +16,28 @@ class ItemStoryController extends Controller
     /*Trả về view danh sách các item*/
     public function index(ItemStoryRepository $itemStoryRepository)
     {
+        $lists = $itemStoryRepository->getAllItem('en');        
+        $obj = $itemStoryRepository->getFirstItemInDB('en');
+        return view('Backend.items.index',['lists' => $lists,'firstObj' => $obj]);
+    }
+
+    public function detail($item_id,ItemStoryRepository $itemStoryRepository)
+    {
         $lists = $itemStoryRepository->getAllItem('en');
-        return view('Backend.stories.index',['lists' => $lists]);
+        $obj = $itemStoryRepository->findItem($item_id,'en');
+        $validator = Validator::make(['item_story_id' => $item_id], [
+            'item_id'   => 'exists:item_id,item_id'
+            ], []);
+
+        if ($validator->fails())
+        {
+            return redirect()->back();
+        }
+        else
+        {
+            return view('Backend.items.index', ['lists' => $lists,'firstObj' => $obj]);
+
+        }
     }
 
     /*Trả về view tạo mới một item với danh sách parent_id */
@@ -32,7 +52,7 @@ class ItemStoryController extends Controller
                 $sub['sub_con'] = $sub_con;
             }*/
         }
-        return view('Backend.stories.create',['category_list' => $category_list]);
+        return view('Backend.items.create',['category_list' => $category_list]);
     }
 
     /*
@@ -45,7 +65,7 @@ class ItemStoryController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'slug'      =>  'required',
+                
                 'code'      =>  'required',
                 'parent_id' =>  'required',
                 'status'    =>  'required',
@@ -59,7 +79,7 @@ class ItemStoryController extends Controller
                 'description_jp' => 'required',
             ],
             [
-                'slug.required'             => 'Vui lòng nhập slug',
+                
                 'code.required'             => 'Vui lòng nhập mã cho bối cảnh',
                 'parent_id.required'        => 'Vui lòng chọn parent_id',
                 'status.required'           => 'Vui lòng chọn trạng thái cho bối cảnh',
@@ -82,7 +102,7 @@ class ItemStoryController extends Controller
         }
         else
         {
-            $slug = $request->input('slug');
+            
             $code = $request->input('code');
             $parent_id = $request->input('parent_id');
             $status = $request->input('status');
@@ -98,13 +118,8 @@ class ItemStoryController extends Controller
                 [
                     "category_id"       => $parent_id,
                     "code"              => $code,
-                    "slug"              => $slug,
                     "status"            => $status,
-                    "deleted_flag"      => 0,
-                    "created_user"      => 1,     
-                    "created_time"      => date("Y-m-d H:i:s"),
-                    "updated_user"      => 1,
-                    "updated_time"      => date("Y-m-d H:i:s"),
+                    
                 ]);
             /*
                 *uplaod media.
@@ -152,11 +167,7 @@ class ItemStoryController extends Controller
                     "title"          => $name_vn,
                     "description"   => $description_vn,
                     "locale"        => 'vi',
-                    "deleted_flag"  => 0,
-                    "created_user"  => 1,
-                    "created_time"  => date("Y-m-d H:i:s"),
-                    "updated_user"  => 1,
-                    "updated_time"  => date("Y-m-d H:i:s"),
+                    
                 ]
             );
 
@@ -167,11 +178,7 @@ class ItemStoryController extends Controller
                     "title"         => $name_en,
                     "description"   => $description_en,
                     "locale"        => 'en',
-                    "deleted_flag"  => 0,
-                    "created_user"  => 1,
-                    "created_time"  => date("Y-m-d H:i:s"),
-                    "updated_user"  => 1,
-                    "updated_time"  => date("Y-m-d H:i:s"),
+                    
                 ]
             );
 
@@ -182,11 +189,7 @@ class ItemStoryController extends Controller
                     "title"         => $name_jp,
                     "description"   => $description_jp,
                     "locale"        => 'jp',
-                    "deleted_flag"  => 0,
-                    "created_user"  => 1,
-                    "created_time"  => date("Y-m-d H:i:s"),
-                    "updated_user"  => 1,
-                    "updated_time"  => date("Y-m-d H:i:s"),
+                    
                 ]
             );
             /* Kiểm tra trạng thái và redirect về trang danh sách danh mục*/
@@ -200,7 +203,7 @@ class ItemStoryController extends Controller
     /*
         function trả về view chỉnh sửa với dữ liệu là danh sách parent_id
     */
-    public function update($id,Request $request, CategoryRepository $categoryRepository, ItemStoryRepository $itemStoryRepository, ItemTranslateRepository $itemTranslateRepository )
+    public function update($id,Request $request, CategoryRepository $categoryRepository, ItemStoryRepository $itemStoryRepository)
     {
         $validator = Validator::make(['item_story_id' => $id], [
             'item_story_id'   => 'exists:m_item_story,item_story_id'
@@ -220,48 +223,43 @@ class ItemStoryController extends Controller
                 $row['sub'] = $sub;
             }
             $item_story = $itemStoryRepository->find((int)$id);
-            return view('Backend.stories.update', ['item_story' => $item_story,'category_list' => $category_list]);
+            return view('Backend.items.update', ['item_story' => $item_story,'category_list' => $category_list]);
         }
     }
 
     /*
         *Thực hiện chức năng chỉnh sửa.
     */
-    public function postUpdate($id, Request $request, ItemStoryRepository $itemStoryRepository)
+    public function postUpdate($id, Request $request, ItemStoryRepository $itemStoryRepository,ItemTranslateRepository $itemTranslateRepository )
     {
         //Tìm kiếm item theo id và kiểm tra validate khi chỉnh sửa
         $item = $itemStoryRepository->find((int) $id);
         $validator = Validator::make(
             $request->all(),
             [
-                'slug'      =>  'required',
-                'code'      =>  'required',
-                'parent_id' =>  'required',
-                'status'    =>  'required',
-                'image'     =>  'required|image|max:4096',
-                'sound'     =>  'sometimes|max:4096',
-                'name_vn'   =>  'required',
-                'name_en'   =>  'required',
-                'name_jp'   =>  'required',
-                'description_vn' => 'required',
-                'description_en' => 'required',
-                'description_jp' => 'required',
+                
+                'code'              =>  'required',
+                'parent_id'         =>  'required',
+                'status'            =>  'required',
+                'name_vn'           =>  'required',
+                'name_en'           =>  'required',
+                'name_jp'           =>  'required',
+                'description_vn'    =>  'required',
+                'description_en'    =>  'required',
+                'description_jp'    =>  'required',
+                
             ],
             [
-                'slug.required'             => 'Vui lòng nhập slug',
+                
                 'code.required'             => 'Vui lòng nhập mã cho bối cảnh',
                 'parent_id.required'        => 'Vui lòng chọn parent_id',
                 'status.required'           => 'Vui lòng chọn trạng thái cho bối cảnh',
-                'image.required'            => 'Vui lòng chọn hình ảnh',
-                'image.image'               => 'Hình ảnh bạn chọn không hợp lệ',
-                'image.max'                 => 'Hình ảnh phải nhỏ hơn 4MB',
-                'sound.max'                 => 'Âm thanh phải nhỏ hơn 4MB',
                 'name_vn.required'          => 'Vui lòng nhập tên Tiếng Việt cho bối cảnh',
                 'name_en.required'          => 'Vui lòng nhập tên Tiếng Anh cho bối cảnh',
                 'name_jp.required'          => 'Vui lòng nhập tên Tiếng Nhật cho bối cảnh',
-                'description_vn.required'   => 'Vui lòng nhập mô tả cho bối cảnh bằng Tiếng Việt',
-                'parent_id.description_en'  => 'Vui lòng nhập mô tả cho bối cảnh bằng Tiếng Anh',
-                'description_jp.required'   => 'Vui lòng nhập mô tả cho bối cảnh bằng Tiếng Nhật',
+                'description_vn.required'   => 'Vui lòng nhập mô tả Tiếng Việt cho bối cảnh',
+                'parent_id.description_en'  => 'Vui lòng nhập mô tả Tiếng Anh cho bối cảnh  ',
+                'description_jp.required'   => 'Vui lòng nhập mô tả Tiếng Nhật cho bối cảnh ',
 
             ]);
 
@@ -271,7 +269,7 @@ class ItemStoryController extends Controller
         }
         else
         {
-            $slug = $request->get('slug');
+            
             $code = $request->get('code');
             $parent_id = $request->get('parent_id');
             $status = $request->get('status');
@@ -281,26 +279,25 @@ class ItemStoryController extends Controller
             $description_vn = $request->get('description_vn');
             $description_en = $request->get('description_en');
             $description_jp = $request->get('description_jp');
-
             //upload file
             if (Input::hasfile('image'))
             {
                 $nameImage = Input::file('image')->getClientOriginalExtension();
+                return $nameImage;
                 $imageURL = $id . "." . date("H_i_s",time()). ".". $nameImage;
                 $oldImage = $item->url_image;
                 if($oldImage != '')
                 {
-                    //Xóa file cũ khi có chỉnh sửa để tránh lãng phí bộ nhớ
                     if(File::exists(public_path('upload/image/item_Story/') . $oldImage))
                     {
                         unlink(public_path('upload/image/item_Story/') . $oldImage);   
                     } 
                 }
                 Input::file('image')->move(public_path('upload/image/item_Story/'), $imageURL);
-                //update file
+                
                 $itemStoryRepository->update(
                     [
-                        "image"          => $imageURL,
+                        "url_image"          => $imageURL,
                     ],
                     $id,
                     "item_story_id"
@@ -344,61 +341,52 @@ class ItemStoryController extends Controller
             $itemStoryRepository->update([
                 "category_id"       => $parent_id,
                 "code"              => $code,
-                "slug"              => $slug,
+                
                 "status"            => $status,
-                "deleted_flag"      => 0,
-                "created_user"      => 1,     
-                "created_time"      => date("Y-m-d H:i:s"),
-                "updated_user"      => 1,
-                "updated_time"      => date("Y-m-d H:i:s"),
-            ]);
+            ],
+            $id,
+            "item_story_id");
             
             /* Chỉnh sửa bối cảnh (vn) cho table m_item_story_translation */
-            $item_story_translation_vn = $itemTranslateRepository->create(
+            $item_story_translation_vn = $itemTranslateRepository->updateItemTranslate(
                 [
-                    "category_id"   => $item->category_id,
-                    "name"          => $name_vn,
+                    "title"         => $name_vn,
                     "description"   => $description_vn,
                     "locale"        => 'vi',
-                    "deleted_flag"  => 0,
-                    "created_user"  => 1,
-                    "created_time"  => date("Y-m-d H:i:s"),
-                    "updated_user"  => 1,
-                    "updated_time"  => date("Y-m-d H:i:s"),
-                ]
+
+                ],$item->item_story_id,
+                "item_story_id", 
+                'vi',
+                "locale"
             );
 
             /* Chỉnh sửa bối cảnh (en) cho table m_item_story_translation */
-            $item_story_translation_en = $itemTranslateRepository->create(
+            $item_story_translation_en = $itemTranslateRepository->updateItemTranslate(
                 [
-                    "category_id"   => $item->category_id,
-                    "name"          => $name_en,
+                    "title"         => $name_en,
                     "description"   => $description_en,
                     "locale"        => 'en',
-                    "deleted_flag"  => 0,
-                    "created_user"  => 1,
-                    "created_time"  => date("Y-m-d H:i:s"),
-                    "updated_user"  => 1,
-                    "updated_time"  => date("Y-m-d H:i:s"),
-                ]
+
+                ],$item->item_story_id,
+                "item_story_id", 
+                'en',
+                "locale"
             );
 
             /* Chỉnh sửa bối cảnh (jp) cho table m_item_story_translation */
-            $item_story_translation_jp = $itemTranslateRepository->create(
+            $item_story_translation_jp = $itemTranslateRepository->updateItemTranslate(
                 [
-                    "category_id"   => $item->category_id,
-                    "name"          => $name_jp,
+                    "title"         => $name_jp,
                     "description"   => $description_jp,
                     "locale"        => 'jp',
-                    "deleted_flag"  => 0,
-                    "created_user"  => 1,
-                    "created_time"  => date("Y-m-d H:i:s"),
-                    "updated_user"  => 1,
-                    "updated_time"  => date("Y-m-d H:i:s"),
-                ]
+
+                ],$item->item_story_id,
+                "item_story_id", 
+                'jp',
+                "locale"
             );
             /* Kiểm tra trạng thái và redirect về trang danh sách danh mục*/
-            if($item_story!=null && $item_story_translation_vn!=null && $item_story_translation_en!=null && $item_story_translation_jp!=null) {
+            if($item!=null && $item_story_translation_vn!=null && $item_story_translation_en!=null && $item_story_translation_jp!=null) {
                 return redirect('/admin/story_item')->with('notify-success', 'Thêm danh mục thành công');
             } else {
                 return redirect('/admin/story_item')->with('notify-error', 'Thêm danh mục thất bại');

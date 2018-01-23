@@ -14,14 +14,14 @@
         @if($paramater == "admin" && $view == "")
         <li class="active">
             <a href="{{ URL::asset('/admin')}}">
-                <i class="pe-7s-graph"></i>
+                <i class="pe-7s-home"></i>
                 <p>Trang chủ</p>
             </a>
         </li>
         @else
         <li class="">
             <a href="{{ URL::asset('/admin')}}">
-                <i class="pe-7s-graph"></i>
+                <i class="pe-7s-home"></i>
                 <p>Trang chủ</p>
             </a>
         </li>
@@ -46,28 +46,28 @@
         @if($view == "story_item")
         <li class="active">
             <a href="{{ URL::asset('admin/story_item')}}">
-                <i class="pe-7s-photo-gallery"></i>
-                <p>Hình ảnh</p>
+                <i class="pe-7s-photo"></i>
+                <p>Bối cảnh</p>
             </a>
         </li>
         @else
         <li>
             <a href="{{ URL::asset('admin/story_item')}}">
-                <i class="pe-7s-photo-gallery"></i>
-                <p>Hình ảnh</p>
+                <i class="pe-7s-photo"></i>
+                <p>Bối cảnh</p>
             </a>
         </li>
         @endif
         @if($view == "stories")
         <li class="active">
-            <a href="typography.html">
+            <a href="{{ URL::asset('admin/category')}}">
                 <i class="pe-7s-news-paper"></i>
                 <p>Câu chuyện</p>
             </a>
         </li>
         @else
         <li>
-            <a href="typography.html">
+            <a href="{{ URL::asset('admin/category')}}">
                 <i class="pe-7s-news-paper"></i>
                 <p>Câu chuyện</p>
             </a>
@@ -92,10 +92,11 @@
             </a>
         </li>
         <li class="active-pro">
-            <a href="upgrade.html">
-                <i class="pe-7s-rocket"></i>
-                <p>Upgrade to PRO</p>
+            <a href="{{ URL::asset('admin/code')}}">
+                <i class="pe-7s-shuffle"></i>
+                <p>Mã đăng nhập</p>
             </a>
         </li>
+
     </ul>
 </div>

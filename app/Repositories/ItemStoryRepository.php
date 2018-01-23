@@ -18,4 +18,16 @@ class ItemStoryRepository extends BaseRepository
         return $this->model->where('deleted_flag',0)->get();
     }
 
+    public function getFirstItemInDB($lang)
+    {
+        app()->setLocale($lang);
+        return $this->model->where('deleted_flag',0)->first();
+    }
+
+    public static function findItem($id,$lang)
+    {
+        app()->setLocale($lang);
+        return MItemStory::where('item_story_id', $id)->first();
+    }
+
 }

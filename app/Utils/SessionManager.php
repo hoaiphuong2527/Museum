@@ -79,9 +79,11 @@ class SessionManager extends Session
     public static function isLogined()
     {
         $getLogin = SessionManager::getLoginInFontend();
+        //var_dump($getLogin);die();
         $isLogined = false;
-        if($getLogin != null && $getLogin->deleted_flag == 0 && $getLogin->expried < time()) {
-            $isLogined = true;
+        if($getLogin != null && $getLogin->deleted_flag == 0 ) {
+            if($getLogin->expried == null || $getLogin->expried < time())
+                $isLogined = true;
         }
         return $isLogined;
     }

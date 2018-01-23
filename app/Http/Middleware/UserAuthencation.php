@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
+use App\Utils\SessionManager;
 
 use Closure;
 
@@ -21,7 +22,7 @@ class UserAuthencation
         }
         else
         {
-            return redirect('/login');
+            return redirect('/');
         }
     }
 }

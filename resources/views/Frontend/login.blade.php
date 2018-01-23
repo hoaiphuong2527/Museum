@@ -11,7 +11,7 @@
         <link href='http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet'>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <link href="{{ URL::asset('frontend/css/login.css')}}" rel="stylesheet" type="text/css"/>
-        <script type="text/javascript">
+       {{-- <script type="text/javascript">
             function KiemTraCode(){
                 var testCode = document.getElementById('code');
                 // alert(testCode);
@@ -44,7 +44,7 @@
                     document.getElementById('keyboard').style.display = "none";
                 })
             });
-        </script>
+        </script>--}}
     </head>
     <body>
         <div class="container">
@@ -62,17 +62,20 @@
                 <!-- Form-->
                 <div class="login-page account-container">
                     <h1>WELCOME TO THE WAR REMNANTS MUSEUM </h1>
-                    <form action="" method="post">
+                    <form method="post">
                         {{ csrf_field() }}
                         <div class="form-group" >
                             <input class="form-control" placeholder="code" name="code" type="text" value="" id="code">
                             <div style="background-color: #f7f1e7">
                                  @include('Frontend.keyboard') 
                             </div>
-                           
+                            
                         </div>
+                        <span class="help-block">
+                                <strong style="color: yellow;padding-top: 10px">{{ $errors->first() }}</strong>
+                            </span>
                         <!-- Button next -->
-                        <a class="btn submit-button" onClick="return KiemTraCode('code')" href="{{ URL::asset('/homepage')}}" >Tiếp tục</a>
+                        <a class="btn submit-button">Tiếp tục</a>
                         <!-- End Button next -->
                     </form>
                 </div>
