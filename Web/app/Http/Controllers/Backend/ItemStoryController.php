@@ -69,8 +69,7 @@ class ItemStoryController extends Controller
             $request->all(),
             [
                 
-                'code'      =>  'required',
-                'parent_id' =>  'required',
+                'code'      =>  'required|min:5|max:5|unique:m_item_story,code',
                 'status'    =>  'required',
                 'image'     =>  'required|image|max:4096',
                 'sound'     =>  'sometimes|max:4096',
@@ -84,7 +83,9 @@ class ItemStoryController extends Controller
             [
                 
                 'code.required'             => 'Vui lòng nhập mã cho bối cảnh',
-                'parent_id.required'        => 'Vui lòng chọn parent_id',
+                'code.unique'               => 'Mã tìm kiếm này đã tồn tại', 
+                'code.min'                  => 'Mã tìm kiếm có tối thiểu 5 ký tự',
+                'code.max'                  => 'Mã tìm kiếm có tối đa 5 ký tự',              
                 'status.required'           => 'Vui lòng chọn trạng thái cho bối cảnh',
                 'image.required'            => 'Vui lòng chọn hình ảnh',
                 'image.image'               => 'Hình ảnh bạn chọn không hợp lệ',
@@ -104,10 +105,8 @@ class ItemStoryController extends Controller
             return redirect()->back()->with('notify', $validator->errors()->first())->withInput();
         }
         else
-        {
-            
+        {          
             $code = $request->input('code');
-            $parent_id = $request->input('parent_id');
             $status = $request->input('status');
             $name_vn = $request->input('name_vn');
             $name_en = $request->input('name_en');
@@ -118,8 +117,7 @@ class ItemStoryController extends Controller
 
             //Thực hiện chức năng tạo
             $item_story = $itemStoryRepository->create(
-                [
-                    "category_id"       => $parent_id,
+                [                    
                     "code"              => $code,
                     "status"            => $status,
                     
@@ -237,8 +235,7 @@ class ItemStoryController extends Controller
             $request->all(),
             [
                 
-                'code'              =>  'required',
-                'parent_id'         =>  'required',
+                'code'              =>  'required|min:5|max:5|unique:m_item_story,code',
                 'status'            =>  'required',
                 'name_vn'           =>  'required',
                 'name_en'           =>  'required',
@@ -252,7 +249,9 @@ class ItemStoryController extends Controller
             [
                 
                 'code.required'             => 'Vui lòng nhập mã cho bối cảnh',
-                'parent_id.required'        => 'Vui lòng chọn parent_id',
+                'code.min'                  => 'Mã tìm kiếm có tối thiểu 5 ký tự',
+                'code.max'                  => 'Mã tìm kiếm có tối đa 5 ký tự',
+                'code.unique'               => 'Mã tìm kiếm này đã tồn tại', 
                 'status.required'           => 'Vui lòng chọn trạng thái cho bối cảnh',
                 'name_vn.required'          => 'Vui lòng nhập tên Tiếng Việt cho bối cảnh',
                 'name_en.required'          => 'Vui lòng nhập tên Tiếng Anh cho bối cảnh',
@@ -271,7 +270,6 @@ class ItemStoryController extends Controller
         {
             
             $code = $request->code;
-            $parent_id = $request->parent_id;
             $status = $request->status;
             $name_vn = $request->name_vn;
             $name_en = $request->name_en;
@@ -344,9 +342,7 @@ class ItemStoryController extends Controller
 
             //update item
             $itemStoryRepository->update([
-                "category_id"       => $parent_id,
-                "code"              => $code,
-                
+                "code"              => $code,                
                 "status"            => $status,
             ],
             $id,

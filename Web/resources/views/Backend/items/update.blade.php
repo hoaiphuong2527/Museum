@@ -58,22 +58,7 @@ $status = MSetting::where('s_key','STATUS')->get();
                                                     <input type="text" name="code" class="form-control" placeholder="Code value" value="{{ old('code',$item_story->code ) }}">
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Danh mục cha</label>
-                                                <div class="col-md-9 col-sm-9 col-xs-12">
-                                                    <select class="select2_group form-control" name="parent_id">
-                                                       @foreach($category_list as $row)
-                                                            <option value="{{$row->category_id}}" @if (old('parent_id',$item_story->category_id) == $row->category_id) selected @endif>{{$row->name}}</option>
-                                                            @foreach($row->children as $sub)
-                                                                <option value="{{$sub->category_id}}" @if (old('parent_id',$item_story->category_id) == $sub->category_id) selected @endif>&nbsp;&nbsp;---{{$sub->name}}</option>
-                                                                @foreach($sub->children as $subchild)
-                                                                    <option value="{{$subchild->category_id}}" @if (old('parent_id',$item_story->category_id) == $subchild->category_id) selected @endif>&nbsp;&nbsp;------{{$subchild->name}}</option>
-                                                                @endforeach
-                                                            @endforeach
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
+                                            
 
                                             <div class="form-group">
                                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Trạng thái</label>

@@ -39,6 +39,10 @@ Route::group(['prefix' => '/admin','middleware' => 'AdminAuthencation'], functio
 //    Route::get('/category/delete/{id}','Backend\CategoryController@destroyQuiz');
 //    Route::post('/category/deleteall','Backend\CategoryController@deleteall');
     /*End Category*/
+    
+    Route::get('/stories','Backend\StoryController@index');
+    Route::get('/stories/create','Backend\StoryController@create');
+
 
     /*User*/
     Route::get('/users', 'Backend\UserController@users');

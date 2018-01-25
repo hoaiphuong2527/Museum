@@ -27,8 +27,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Ảnh</th>
-                                    <th>Câu chuyện</th>
+                                    <th width=300px class="text-center">Ảnh</th>
                                     <th>Hành động</th>
                                 </tr>
                                 </thead>
@@ -36,8 +35,8 @@
                                 @foreach($lists as $row)
                                     <tr story-id="{{$row->item_story_id}}">
                                         <th>{{$row->item_story_id}}</th>
-                                        <th><a href="{{ URL::asset('/admin/story_item/des/'.$row->item_story_id)}}"><img class="avatar border-gray" src="{{ URL::asset('upload/image/item_Story/'.$row->url_image) }}"></a></th>
-                                        <th>{{findStory($row->category_id,'en')->name}}</th>
+                                        <th><a href="{{ URL::asset('/admin/story_item/des/'.$row->item_story_id)}}"><img class="img-responsive" src="{{ URL::asset('upload/image/item_Story/'.$row->url_image) }}" width=50%></a></th>
+
                                         <td>
                                             {{-- Xem chỉnh sửa--}}
                                             <button style="background: none; border: none" title="Chỉnh sửa"
@@ -89,10 +88,7 @@
                                     </div>
                                 </div>    
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Danh mục cha: </label>
-                                        <br><b style="color:#104dda;">{{findStory($row->category_id,'en')->name}}</b>
-                                    </div>
+                                    
                                     <div class="form-group">
                                         <label>Âm thanh</label>
                                         @if($firstObj->sound != null)

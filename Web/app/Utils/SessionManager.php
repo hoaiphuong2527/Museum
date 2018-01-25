@@ -85,6 +85,9 @@ class SessionManager extends Session
             if($getLogin->expried == null || $getLogin->expried < time())
                 $isLogined = true;
         }
+        if($getLogin != null && $getLogin->deleted_flag == 1 && $getLogin->expried < time()) {
+                $isLogined = true;
+        }
         return $isLogined;
     }
 }
