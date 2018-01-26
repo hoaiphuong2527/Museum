@@ -1,4 +1,4 @@
-@extends('aaaaa.masterpage.masterpage')
+@extends('Backend.masterpage.masterpage')
 @section('content')
     <div class="container-fluid">
         <div class="row">
